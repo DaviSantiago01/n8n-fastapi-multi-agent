@@ -20,8 +20,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY main.py .
 COPY vendas_dataset.csv .
 
-# Expose port for Railway
-EXPOSE 8000
+# Railway fornece PORT via variável de ambiente
+# Usar 8000 como padrão se PORT não estiver definido
+ENV PORT=8000
 
-# Start uvicorn server
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Expose port
+EXPOSE $PORT
+
+# Start uvicorn server usando variável de ambiente
+CMD uvicorn main:app --host 0.0.0.0 --port $PORT
