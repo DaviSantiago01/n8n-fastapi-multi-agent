@@ -1,23 +1,20 @@
-# main.py
+# main.py - MVP com LangChain + Groq
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import pandas as pd
-import numpy as np
-from sklearn.ensemble import IsolationForest
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
-from typing import Optional, TypedDict
-import uuid
-from groq import Groq
 import os
 from dotenv import load_dotenv
+from langchain_groq import ChatGroq
+from langchain.prompts import ChatPromptTemplate
+from langchain.schema.output_parser import StrOutputParser
 
 # Carregar variáveis de ambiente
 load_dotenv()
 
 app = FastAPI(title="Dataset Analyzer API")
 
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -26,183 +23,169 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Cliente Groq usando variável de ambiente
+# LangChain + Groq
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 if not GROQ_API_KEY:
-    raise ValueError("GROQ_API_KEY não encontrada nas variáveis de ambiente")
+    raise ValueError("GROQ_API_KEY não encontrada")
 
-client = Groq(api_key=GROQ_API_KEY)
+# Inicializar LLM com LangChain
+llm = ChatGroq(
+    model="gpt-oss-120b",
+    api_key=GROQ_API_KEY,
+    temperature=0.7
+)
 
 # ===== SCHEMAS =====
-class N8NDatasetRequest(BaseModel):
+class DatasetRequest(BaseModel):
+    """Request do N8N com dados do CSV"""
     nome_arquivo: str
-    total_de_linhas: int
     dados_completos: list
-    user_email: Optional[str] = None
 
 class AnalyzeResponse(BaseModel):
-    dataset_id: str
-    route: str
-    summary: dict
-    insights: list
-    agent_recommendation: str
+    """Resposta da análise"""
+    nome_arquivo: str
+    resumo_dados: dict
+    insights: str
 
-class AnalysisState(TypedDict):
-    df: pd.DataFrame
-    route: str
-    analysis: dict
-    insights: list
-    recommendation: str
+# ===== LANGCHAIN: PROMPT TEMPLATE =====
+analysis_prompt = ChatPromptTemplate.from_messages([
+    ("system", "Você é um analista de dados experiente. Seja claro, objetivo e prático."),
+    ("user", """Analise este dataset e forneça insights acionáveis:
 
-# ===== AGENTES =====
-def decisor_agent(state: AnalysisState) -> AnalysisState:
-    """Decide: ML ou EDA"""
-    df = state["df"]
+DATASET: {filename}
+Total de linhas: {total_linhas}
+Total de colunas: {total_colunas}
+Colunas: {colunas}
+Valores faltantes: {valores_faltantes}
+Linhas duplicadas: {linhas_duplicadas}
 
-    response = client.chat.completions.create(
-        model="gpt-oss-120b",
-        messages=[
-            {"role": "system", "content": "Responda APENAS: ML ou EDA"},
-            {"role": "user", "content": f"""Dataset:
-- Linhas: {len(df)}
-- Colunas: {df.shape[1]}
-- Numéricas: {len(df.select_dtypes(include=[np.number]).columns)}
+PREVIEW DOS DADOS:
+{preview}
 
-ML se >500 linhas E >50% numéricas, senão EDA.
-Responda: ML ou EDA"""}
-        ],
-        temperature=0
-    )
-    
-    route = "ml" if "ML" in response.choices[0].message.content.upper() else "eda"
-    state["route"] = route
-    return state
+ESTATÍSTICAS (se disponíveis):
+{estatisticas}
 
-def eda_agent(state: AnalysisState) -> AnalysisState:
-    """Análise Exploratória"""
-    df = state["df"]
-    numeric_cols = df.select_dtypes(include=[np.number]).columns
-    
-    state["analysis"] = {
-        "linhas": len(df),
-        "colunas": df.shape[1],
-        "numericas": len(numeric_cols),
-        "faltantes": int(df.isnull().sum().sum()),
-        "duplicados": int(df.duplicated().sum()),
-        "stats": df[numeric_cols].describe().to_dict() if len(numeric_cols) > 0 else {}
+FORNEÇA:
+1. **3 Insights Principais** sobre os dados
+2. **2 Recomendações de Ações** práticas
+3. **Pontos de Atenção** (se houver problemas detectados)
+
+Seja direto e acionável.""")
+])
+
+# Chain: Prompt → LLM → Output Parser
+analysis_chain = analysis_prompt | llm | StrOutputParser()
+
+# ===== FUNÇÃO PRINCIPAL =====
+def analyze_dataset(df: pd.DataFrame, filename: str) -> dict:
+    """
+    Analisa dataset e gera insights usando LangChain + Groq
+
+    1. Calcula estatísticas básicas
+    2. Usa LangChain chain para gerar insights
+    3. Retorna análise completa
+    """
+
+    # 1. ESTATÍSTICAS BÁSICAS
+    numeric_cols = df.select_dtypes(include=['number']).columns.tolist()
+
+    resumo = {
+        "total_linhas": len(df),
+        "total_colunas": len(df.columns),
+        "colunas": df.columns.tolist(),
+        "colunas_numericas": len(numeric_cols),
+        "valores_faltantes": int(df.isnull().sum().sum()),
+        "linhas_duplicadas": int(df.duplicated().sum())
     }
-    return state
 
-def ml_agent(state: AnalysisState) -> AnalysisState:
-    """Machine Learning"""
-    df = state["df"]
-    numeric_cols = df.select_dtypes(include=[np.number]).columns
-    
-    if len(numeric_cols) == 0:
-        state["analysis"] = {"erro": "Sem colunas numéricas"}
-        return state
-    
-    X = df[numeric_cols].fillna(0)
-    
-    # Outliers
-    iso = IsolationForest(contamination=0.1, random_state=42)
-    outliers = iso.fit_predict(X)
-    n_outliers = int((outliers == -1).sum())
-    
-    # Clustering
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-    n_clusters = min(4, max(2, len(df) // 25))
-    kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
-    clusters = kmeans.fit_predict(X_scaled)
-    
-    state["analysis"] = {
-        "outliers": n_outliers,
-        "outlier_percent": round(n_outliers / len(df) * 100, 2),
-        "clusters": n_clusters,
-        "distribuicao": {f"C{i}": int((clusters == i).sum()) for i in range(n_clusters)}
+    # Estatísticas numéricas (apenas 3 primeiras colunas)
+    estatisticas_str = "Nenhuma coluna numérica"
+    if numeric_cols:
+        stats = {}
+        for col in numeric_cols[:3]:
+            stats[col] = {
+                "media": round(float(df[col].mean()), 2),
+                "minimo": round(float(df[col].min()), 2),
+                "maximo": round(float(df[col].max()), 2)
+            }
+        resumo["estatisticas"] = stats
+        estatisticas_str = str(stats)
+
+    # Preview dos dados (5 primeiras linhas)
+    preview = df.head(5).to_dict(orient='records')
+
+    # 2. GERAR INSIGHTS COM LANGCHAIN
+    insights = analysis_chain.invoke({
+        "filename": filename,
+        "total_linhas": resumo['total_linhas'],
+        "total_colunas": resumo['total_colunas'],
+        "colunas": ', '.join(resumo['colunas']),
+        "valores_faltantes": resumo['valores_faltantes'],
+        "linhas_duplicadas": resumo['linhas_duplicadas'],
+        "preview": str(preview[:3]),
+        "estatisticas": estatisticas_str
+    })
+
+    return {
+        "resumo_dados": resumo,
+        "insights": insights
     }
-    return state
 
-def insights_agent(state: AnalysisState) -> AnalysisState:
-    """Gera Insights"""
-    df = state["df"]
-
-    response = client.chat.completions.create(
-        model="gpt-oss-120b",
-        messages=[
-            {"role": "system", "content": "Analista de dados. Seja objetivo."},
-            {"role": "user", "content": f"""Análise: {state['route'].upper()}
-Resultados: {state['analysis']}
-Preview: {df.head(3).to_dict()}
-
-Gere:
-INSIGHTS:
-- insight 1
-- insight 2
-
-RECOMENDAÇÃO:
-texto"""}
-        ],
-        temperature=0.7
-    )
-    
-    content = response.choices[0].message.content
-    parts = content.split("RECOMENDAÇÃO:")
-    insights_text = parts[0].replace("INSIGHTS:", "").strip()
-    recommendation = parts[1].strip() if len(parts) > 1 else "Análise concluída"
-    
-    insights = [line.strip("- ").strip() for line in insights_text.split("\n") if line.strip().startswith("-")]
-    
-    state["insights"] = insights if insights else ["Dataset processado"]
-    state["recommendation"] = recommendation
-    return state
-
-# ===== ORQUESTRADOR =====
-def run_analysis(df: pd.DataFrame) -> AnalysisState:
-    """Orquestra agentes manualmente"""
-    state: AnalysisState = {
-        "df": df,
-        "route": "",
-        "analysis": {},
-        "insights": [],
-        "recommendation": ""
-    }
-    
-    # 1. Decisor
-    state = decisor_agent(state)
-    
-    # 2. ML ou EDA
-    if state["route"] == "ml":
-        state = ml_agent(state)
-    else:
-        state = eda_agent(state)
-    
-    # 3. Insights
-    state = insights_agent(state)
-    
-    return state
-
-# ===== ENDPOINT =====
+# ===== ENDPOINTS =====
 @app.post("/api/analyze", response_model=AnalyzeResponse)
-async def analyze_dataset(request: N8NDatasetRequest):
+async def analyze(request: DatasetRequest):
+    """
+    Endpoint principal: recebe dados do N8N e retorna análise
+
+    Flow:
+    1. N8N envia CSV como JSON
+    2. Converte para DataFrame
+    3. Gera estatísticas + insights via LangChain
+    4. Retorna análise completa
+    """
     try:
+        # Converter lista de dicts para DataFrame
         df = pd.DataFrame(request.dados_completos)
-        result = run_analysis(df)
-        
+
+        if df.empty:
+            raise HTTPException(status_code=400, detail="Dataset vazio")
+
+        # Analisar usando LangChain
+        result = analyze_dataset(df, request.nome_arquivo)
+
         return AnalyzeResponse(
-            dataset_id=str(uuid.uuid4()),
-            route=result["route"],
-            summary=result["analysis"],
-            insights=result["insights"],
-            agent_recommendation=result["recommendation"]
+            nome_arquivo=request.nome_arquivo,
+            resumo_dados=result["resumo_dados"],
+            insights=result["insights"]
         )
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Erro na análise: {str(e)}")
 
 @app.get("/")
 def health():
-    return {"status": "online"}
+    """Health check"""
+    return {
+        "status": "online",
+        "service": "Dataset Analyzer API",
+        "version": "2.0-langchain",
+        "framework": "LangChain + Groq"
+    }
 
-# pip install fastapi uvicorn pandas scikit-learn groq
-# uvicorn main:app --reload
+@app.get("/info")
+def info():
+    """Informações da API"""
+    return {
+        "endpoints": {
+            "/": "Health check",
+            "/api/analyze": "Analisar dataset (POST)",
+            "/docs": "Documentação interativa",
+            "/info": "Informações da API"
+        },
+        "tecnologias": {
+            "framework": "FastAPI",
+            "llm": "gpt-oss-120b (OpenAI via Groq)",
+            "orchestration": "LangChain",
+            "data": "Pandas"
+        }
+    }
