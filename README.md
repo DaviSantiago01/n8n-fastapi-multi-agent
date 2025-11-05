@@ -204,4 +204,9 @@ MIT
 
 ## 👤 Autor
 
-Desenvolvido com FastAPI e Multi-Agent System Architecture
+**Davi Santiago** - Sistema desenvolvido com FastAPI e Multi-Agent System Architecture
+
+## 🔗 Links
+
+- [Repositório GitHub](https://github.com/DaviSantiago01/n8n-fastapi-multi-agent)
+- [Deploy Railway](https://railway.app)
