@@ -12,10 +12,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application
 COPY main.py .
+COPY run.py .
 COPY vendas_dataset.csv .
 
-# Railway usa PORT variavel de ambiente
+# Railway fornece PORT dinamicamente
 EXPOSE 8000
 
-# Start - Railway passa PORT como variavel
-CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Usar script Python que lê PORT programaticamente
+CMD ["python", "run.py"]
