@@ -19,17 +19,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY main.py .
 COPY vendas_dataset.csv .
-COPY start.sh .
-
-# Tornar script executável
-RUN chmod +x start.sh
 
 # Railway fornece PORT via variável de ambiente
 # Usar 8000 como padrão se PORT não estiver definido
 ENV PORT=8000
 
 # Expose port
-EXPOSE $PORT
+EXPOSE 8000
 
-# Start usando script
-CMD ["./start.sh"]
+# Start usando Python para expandir variável corretamente
+CMD python -c "import os; os.system(f'uvicorn main:app --host 0.0.0.0 --port {os.getenv(\"PORT\", \"8000\")}')"
