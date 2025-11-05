@@ -1,0 +1,20 @@
+# requirements.txt
+
+# Framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# Processamento de dados - versões mais recentes e estáveis
+pandas>=2.2.0
+numpy>=1.26.0
+
+# Machine Learning
+scikit-learn>=1.4.0
+
+# IA/LLM
+groq>=0.4.0
+
+# Utilidades
+python-dotenv>=1.0.0
+pydantic>=2.5.0

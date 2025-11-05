@@ -1,0 +1,101 @@
+data,produto,categoria,quantidade,preco_unitario,desconto_percentual,vendedor,regiao,satisfacao_cliente,tempo_entrega_dias,valor_total
+12/04/2024,Webcam,Acessórios,14,1262,0,Pedro Lima,Sul,3,9,17668.0
+27/09/2024,Teclado,Armazenamento,6,753,0,Pedro Lima,Sul,3,11,4518.0
+16/04/2024,Notebook,Acessórios,6,1520,15,Maria Oliveira,Leste,3,8,7752.0
+12/03/2024,Webcam,Informática,13,630,0,João Costa,Leste,3,6,8190.0
+07/07/2024,Mousepad,Informática,19,2887,20,Pedro Lima,Sul,4,7,43882.4
+21/01/2024,SSD,Acessórios,8,2958,10,João Costa,Oeste,5,3,21297.600000000002
+12/04/2024,SSD,Acessórios,2,2344,10,Maria Oliveira,Norte,2,14,4219.2
+01/05/2024,HD Externo,Armazenamento,1,203,0,Maria Oliveira,Oeste,2,1,203.0
+02/08/2024,Mousepad,Periféricos,15,1729,15,João Costa,Centro,3,5,22044.75
+28/03/2024,Mousepad,Acessórios,1,1046,15,Ana Silva,Leste,3,14,889.1
+09/04/2024,Teclado,Informática,5,2794,20,Carlos Santos,Norte,1,12,11176.0
+31/05/2024,SSD,Armazenamento,16,1293,0,Ana Silva,Norte,5,12,20688.0
+10/05/2024,Notebook,Acessórios,19,1142,10,Ana Silva,Centro,4,2,19528.2
+29/05/2024,Monitor,Informática,4,1058,15,Ana Silva,Centro,2,14,3597.2
+14/09/2024,Monitor,Informática,3,2191,0,Pedro Lima,Sul,1,5,6573.0
+20/10/2024,Webcam,Periféricos,17,1823,15,Maria Oliveira,Leste,1,8,26342.35
+10/07/2024,SSD,Armazenamento,17,1007,15,Ana Silva,Leste,2,11,14551.15
+03/10/2024,SSD,Armazenamento,12,502,10,Maria Oliveira,Oeste,4,9,5421.6
+09/06/2024,Monitor,Periféricos,14,1277,5,João Costa,Sul,1,2,16984.1
+22/01/2024,SSD,Periféricos,6,2315,20,Carlos Santos,Sul,1,12,11112.0
+09/09/2024,Teclado,Armazenamento,3,2571,20,João Costa,Sul,5,3,6170.400000000001
+23/08/2024,Headset,Armazenamento,9,2529,10,João Costa,Sul,4,3,20484.9
+18/02/2024,Mouse,Acessórios,5,2438,15,Pedro Lima,Leste,1,1,10361.5
+28/02/2024,Mousepad,Acessórios,17,600,0,Carlos Santos,Leste,4,8,10200.0
+18/06/2024,HD Externo,Periféricos,14,1685,15,João Costa,Sul,2,6,20051.5
+06/07/2024,Webcam,Acessórios,3,1362,10,João Costa,Oeste,3,12,3677.4
+27/09/2024,Headset,Informática,1,1807,20,Carlos Santos,Norte,1,13,1445.6000000000001
+08/07/2024,Monitor,Acessórios,1,406,15,Carlos Santos,Norte,5,8,345.09999999999997
+23/06/2024,Mousepad,Acessórios,3,2120,20,João Costa,Oeste,2,11,5088.0
+20/02/2024,SSD,Informática,18,1835,0,Carlos Santos,Sul,4,9,33030.0
+24/02/2024,HD Externo,Periféricos,10,2619,20,João Costa,Leste,2,5,20952.0
+31/08/2024,SSD,Informática,3,1831,20,João Costa,Norte,1,14,4394.400000000001
+10/05/2024,Notebook,Acessórios,8,2899,5,Pedro Lima,Centro,4,12,22032.399999999998
+14/05/2024,Notebook,Periféricos,14,2859,5,Ana Silva,Centro,3,14,38024.7
+21/01/2024,HD Externo,Acessórios,18,2539,5,João Costa,Oeste,2,3,43416.9
+15/06/2024,HD Externo,Informática,15,1681,20,Maria Oliveira,Sul,1,5,20172.0
+30/09/2024,Monitor,Informática,2,2866,10,Ana Silva,Norte,5,5,5158.8
+29/03/2024,HD Externo,Acessórios,10,1065,20,Ana Silva,Sul,4,5,8520.0
+14/01/2024,Teclado,Armazenamento,2,1398,10,Ana Silva,Norte,2,3,2516.4
+29/08/2024,SSD,Armazenamento,17,565,10,Pedro Lima,Oeste,2,11,8644.5
+21/09/2024,Headset,Informática,8,2889,5,João Costa,Oeste,3,14,21956.399999999998
+22/02/2024,RAM,Informática,1,385,15,Pedro Lima,Centro,3,10,327.25
+01/04/2024,HD Externo,Armazenamento,9,1832,0,João Costa,Sul,5,14,16488.0
+20/09/2024,Webcam,Armazenamento,11,2355,5,Pedro Lima,Centro,5,4,24609.75
+04/02/2024,Notebook,Acessórios,16,546,5,Pedro Lima,Sul,1,9,8299.199999999999
+24/07/2024,Teclado,Acessórios,7,945,15,Maria Oliveira,Centro,1,13,5622.75
+21/03/2024,Mousepad,Armazenamento,10,2257,0,Pedro Lima,Leste,5,10,22570.0
+19/02/2024,RAM,Acessórios,3,901,20,Carlos Santos,Leste,5,9,2162.4
+02/01/2024,Headset,Acessórios,18,1737,20,Maria Oliveira,Leste,4,2,25012.800000000003
+23/02/2024,RAM,Periféricos,13,1981,5,Pedro Lima,Leste,3,8,24465.35
+15/04/2024,HD Externo,Acessórios,7,2787,0,Ana Silva,Norte,1,8,19509.0
+16/09/2024,Monitor,Informática,4,2477,5,Carlos Santos,Leste,3,7,9412.6
+09/07/2024,Notebook,Acessórios,13,1618,10,Carlos Santos,Oeste,3,8,18930.600000000002
+05/08/2024,Notebook,Acessórios,1,1006,5,Carlos Santos,Oeste,5,14,955.6999999999999
+13/02/2024,Mousepad,Armazenamento,8,2788,5,Maria Oliveira,Norte,4,3,21188.8
+10/06/2024,Monitor,Informática,14,1686,20,Pedro Lima,Leste,2,13,18883.2
+20/07/2024,SSD,Acessórios,16,1341,20,Pedro Lima,Leste,4,6,17164.8
+26/09/2024,Mouse,Acessórios,14,1490,20,Ana Silva,Leste,4,1,16688.0
+27/09/2024,Teclado,Periféricos,12,1241,10,Ana Silva,Centro,3,7,13402.800000000001
+02/08/2024,Notebook,Acessórios,19,1116,20,Carlos Santos,Sul,4,1,16963.2
+08/09/2024,Webcam,Acessórios,15,334,0,Ana Silva,Centro,1,9,5010.0
+08/07/2024,Notebook,Periféricos,2,2494,15,Maria Oliveira,Sul,3,1,4239.8
+22/10/2024,RAM,Armazenamento,2,61,0,Pedro Lima,Leste,1,1,122.0
+31/07/2024,Notebook,Acessórios,19,1680,0,Carlos Santos,Leste,2,7,31920.0
+26/07/2024,Notebook,Periféricos,17,2596,20,Ana Silva,Centro,3,2,35305.6
+24/08/2024,Mouse,Informática,10,803,15,Maria Oliveira,Centro,2,14,6825.5
+22/02/2024,Mouse,Armazenamento,6,2132,15,Maria Oliveira,Sul,3,5,10873.199999999999
+06/10/2024,Headset,Informática,15,2824,15,Ana Silva,Oeste,5,8,36006.0
+04/08/2024,SSD,Informática,11,2946,10,Pedro Lima,Sul,4,8,29165.4
+08/09/2024,Webcam,Periféricos,5,139,20,Ana Silva,Centro,5,3,556.0
+06/07/2024,Notebook,Acessórios,1,825,15,Carlos Santos,Centro,2,7,701.25
+10/02/2024,Notebook,Periféricos,8,2702,10,Ana Silva,Norte,4,3,19454.4
+05/06/2024,Teclado,Periféricos,12,1675,5,Maria Oliveira,Centro,3,6,19095.0
+15/01/2024,Mouse,Periféricos,12,467,5,Ana Silva,Norte,4,6,5323.8
+05/03/2024,Webcam,Periféricos,5,164,10,Pedro Lima,Oeste,1,3,738.0
+09/01/2024,Mousepad,Armazenamento,7,666,10,João Costa,Sul,4,7,4195.8
+08/05/2024,Headset,Acessórios,4,875,20,Ana Silva,Sul,1,3,2800.0
+15/05/2024,SSD,Informática,6,1699,20,Pedro Lima,Norte,4,8,8155.200000000001
+03/03/2024,Monitor,Informática,13,1566,5,Pedro Lima,Sul,1,10,19340.1
+18/05/2024,SSD,Acessórios,15,462,15,Maria Oliveira,Centro,2,4,5890.5
+21/03/2024,RAM,Informática,3,778,5,Pedro Lima,Leste,5,13,2217.2999999999997
+11/06/2024,Notebook,Acessórios,8,2858,15,Pedro Lima,Norte,3,1,19434.399999999998
+15/10/2024,Headset,Informática,16,725,15,Pedro Lima,Sul,4,4,9860.0
+17/09/2024,RAM,Periféricos,13,1942,20,Pedro Lima,Norte,5,14,20196.800000000003
+18/08/2024,Webcam,Informática,18,2554,0,Carlos Santos,Norte,3,7,45972.0
+10/02/2024,Monitor,Acessórios,10,2289,0,Carlos Santos,Leste,3,11,22890.0
+28/01/2024,Mouse,Acessórios,19,2836,10,Maria Oliveira,Centro,1,4,48495.6
+14/05/2024,Headset,Acessórios,17,1172,20,Ana Silva,Norte,2,13,15939.2
+19/07/2024,Headset,Acessórios,19,1621,15,Pedro Lima,Sul,2,6,26179.149999999998
+24/09/2024,Notebook,Acessórios,5,1027,0,Ana Silva,Oeste,5,9,5135.0
+02/02/2024,HD Externo,Armazenamento,9,1058,15,Ana Silva,Norte,2,1,8093.7
+17/02/2024,Headset,Armazenamento,12,2193,0,Maria Oliveira,Norte,4,13,26316.0
+02/03/2024,Teclado,Informática,1,1737,0,Pedro Lima,Leste,2,5,1737.0
+03/08/2024,Monitor,Acessórios,1,2760,0,Pedro Lima,Centro,5,11,2760.0
+19/10/2024,Monitor,Informática,15,86,20,João Costa,Oeste,2,7,1032.0
+08/04/2024,Teclado,Acessórios,2,1598,5,Ana Silva,Sul,4,1,3036.2
+20/06/2024,Mousepad,Acessórios,16,2376,15,Ana Silva,Oeste,1,14,32313.6
+01/08/2024,Teclado,Armazenamento,8,2314,20,Carlos Santos,Sul,5,4,14809.6
+04/02/2024,Teclado,Armazenamento,13,2964,20,João Costa,Centro,1,6,30825.600000000002
+14/08/2024,Monitor,Periféricos,1,922,20,Carlos Santos,Sul,1,2,737.6
