@@ -1,19 +1,19 @@
 # requirements.txt
 
 # Framework
-fastapi>=0.104.0
-uvicorn[standard]>=0.24.0
-python-multipart>=0.0.6
+fastapi==0.115.0
+uvicorn[standard]==0.31.0
+python-multipart==0.0.12
 
 # Processamento de dados
-pandas>=2.2.0
-numpy>=1.26.0
+pandas==2.2.3
+numpy==1.26.4
 
 # LangChain + Groq
-langchain>=0.1.0
-langchain-groq>=0.1.0
-langchain-core>=0.1.0
+langchain==0.3.7
+langchain-groq==0.2.1
+langchain-core==0.3.15
 
 # Utilidades
-python-dotenv>=1.0.0
-pydantic>=2.5.0
+python-dotenv==1.0.1
+pydantic==2.9.2
