@@ -58,9 +58,9 @@ class AnalysisState(TypedDict):
 def decisor_agent(state: AnalysisState) -> AnalysisState:
     """Decide: ML ou EDA"""
     df = state["df"]
-    
+
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="gpt-oss-120b",
         messages=[
             {"role": "system", "content": "Responda APENAS: ML ou EDA"},
             {"role": "user", "content": f"""Dataset:
@@ -127,9 +127,9 @@ def ml_agent(state: AnalysisState) -> AnalysisState:
 def insights_agent(state: AnalysisState) -> AnalysisState:
     """Gera Insights"""
     df = state["df"]
-    
+
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="gpt-oss-120b",
         messages=[
             {"role": "system", "content": "Analista de dados. Seja objetivo."},
             {"role": "user", "content": f"""Análise: {state['route'].upper()}
