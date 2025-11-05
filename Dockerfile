@@ -1,31 +1,21 @@
-# Use Python 3.11 slim para Railway
+# Use Python 3.11 slim
 FROM python:3.11-slim
 
-# Set working directory
 WORKDIR /app
 
-# Install system dependencies needed for pandas/numpy/scikit-learn
-RUN apt-get update && apt-get install -y \
-    gcc \
-    g++ \
-    && rm -rf /var/lib/apt/lists/*
+# Install system dependencies
+RUN apt-get update && apt-get install -y gcc g++ && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
+# Copy and install dependencies
 COPY requirements.txt .
-
-# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy application
 COPY main.py .
 COPY vendas_dataset.csv .
 
-# Railway fornece PORT via variável de ambiente
-# Usar 8000 como padrão se PORT não estiver definido
-ENV PORT=8000
-
-# Expose port
+# Railway usa PORT variavel de ambiente
 EXPOSE 8000
 
-# Start usando Python para expandir variável corretamente
-CMD python -c "import os; os.system(f'uvicorn main:app --host 0.0.0.0 --port {os.getenv(\"PORT\", \"8000\")}')"
+# Start - Railway passa PORT como variavel
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
