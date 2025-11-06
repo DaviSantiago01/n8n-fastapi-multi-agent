@@ -131,6 +131,35 @@ def analyze_dataset(df: pd.DataFrame, filename: str) -> dict:
         "insights": insights
     }
 
+# ===== LIMPEZA DE DADOS =====
+def clean_data(dados_completos: list) -> list:
+    """
+    Limpa dados recebidos do N8N removendo campos inválidos
+
+    - Remove campos 'undefined'
+    - Remove valores que são listas
+    - Converte tudo para tipos simples (str, int, float)
+    """
+    cleaned = []
+    for row in dados_completos:
+        clean_row = {}
+        for key, value in row.items():
+            # Ignorar campos 'undefined' ou None
+            if key == "undefined" or key is None:
+                continue
+
+            # Ignorar valores que são listas ou dicts
+            if isinstance(value, (list, dict)):
+                continue
+
+            # Manter apenas valores simples
+            clean_row[key] = value
+
+        if clean_row:  # Só adicionar se tiver algum dado
+            cleaned.append(clean_row)
+
+    return cleaned
+
 # ===== ENDPOINTS =====
 @app.post("/api/analyze", response_model=AnalyzeResponse)
 async def analyze(request: DatasetRequest):
@@ -139,16 +168,23 @@ async def analyze(request: DatasetRequest):
 
     Flow:
     1. N8N envia CSV como JSON
-    2. Converte para DataFrame
-    3. Gera estatísticas + insights via LangChain
-    4. Retorna análise completa
+    2. Limpa dados (remove campos inválidos)
+    3. Converte para DataFrame
+    4. Gera estatísticas + insights via LangChain
+    5. Retorna análise completa
     """
     try:
+        # Limpar dados antes de processar
+        dados_limpos = clean_data(request.dados_completos)
+
+        if not dados_limpos:
+            raise HTTPException(status_code=400, detail="Dataset vazio após limpeza")
+
         # Converter lista de dicts para DataFrame
-        df = pd.DataFrame(request.dados_completos)
+        df = pd.DataFrame(dados_limpos)
 
         if df.empty:
-            raise HTTPException(status_code=400, detail="Dataset vazio")
+            raise HTTPException(status_code=400, detail="DataFrame vazio")
 
         # Analisar usando LangChain
         result = analyze_dataset(df, request.nome_arquivo)
