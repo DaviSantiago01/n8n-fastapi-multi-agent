@@ -30,7 +30,7 @@ if not GROQ_API_KEY:
 
 # Inicializar LLM com LangChain
 llm = ChatGroq(
-    model="gpt-oss-120b",
+    model="llama-3.3-70b-versatile",
     api_key=GROQ_API_KEY,
     temperature=0.7
 )
