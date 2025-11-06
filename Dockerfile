@@ -13,7 +13,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application
 COPY main.py .
 COPY run.py .
-COPY vendas_dataset.csv .
 
 # Railway fornece PORT dinamicamente
 EXPOSE 8000
